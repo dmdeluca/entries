@@ -9,6 +9,7 @@ By default, entries runs in write mode, in which a user types entries in success
 ### examples
 
 `python entries.py` -> runs the program in write mode.
+
 `python entries.py r` -> runs the program in read mode.
 
 ## future directions
