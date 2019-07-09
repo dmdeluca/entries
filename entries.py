@@ -69,7 +69,8 @@ def read_loop():
         for year in include_years:
             for month in include_months:
                 if (include_days == []):
-                    include_days = range(1, calendar.monthrange(year,month)[1]+1)
+                    include_days = range(
+                        1, calendar.monthrange(year, month)[1]+1)
                 for day in include_days:
                     formatted_date = datetime.datetime(
                         year, month, day).date().isoformat()
