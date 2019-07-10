@@ -1,6 +1,6 @@
-# entries
+# about entries
 
-Entries is a small python project that reads and writes journal entries. It is designed to make journaling simple and easy.
+Entries is a small python project that reads and writes journal entries. It is designed to make reflection simple and easy.
 
 ## commands
 
