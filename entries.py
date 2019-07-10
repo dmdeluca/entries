@@ -49,6 +49,9 @@ def store_input(entry_file, user_input):
         ":", "-").replace(".", "-") + '] ' + user_input + '\n')
 
 
+helpful_tips = '\n--TIPS-- try "--has keyword keyword2" or "july 8" or "jul --has dog"\n'
+
+
 def read_loop():
     while (True):
         input_string = input("which entries would you like to read? ")
@@ -58,6 +61,10 @@ def read_loop():
             break
         arguments = input_string.split(' ')
         default_year = datetime.datetime.now().year
+
+        if ("--h" in arguments):
+            print(helpful_tips)
+            continue
 
         include_years = list(
             filter(lambda i: (str(i) in arguments and i != default_year),
@@ -79,10 +86,10 @@ def read_loop():
         none_found = True
         for year in include_years:
             for month in include_months:
+                if (include_days == []):
+                    include_days = range(
+                        1, calendar.monthrange(year, month)[1]+1)
                 for day in include_days:
-                    if (include_days == []):
-                        include_days = range(
-                            1, calendar.monthrange(year, month)[1]+1)
                     formatted_date = datetime.datetime(
                         year, month, day).date().isoformat()
                     path = f'entries/{year}/{month}_({calendar.month_name[month].lower()})/entry-{formatted_date}'
@@ -90,7 +97,7 @@ def read_loop():
                         f = open(path, 'r')
                         all_entries = f.read()
                         f.close()
-                        if (include_words == [] and all_entries != []):
+                        if (include_words == []):
                             print(f'-- entry-{formatted_date} --')
                             print(all_entries)
                             none_found = False
@@ -103,7 +110,7 @@ def read_loop():
                                 entries_to_print += additions
                                 none_found = False
         if none_found:
-            print("no entries found")
+            print("no entries found. (type --h for help.)")
         elif (include_words != []):
             print('-- entries containing {', *include_words, '} --')
             print(*entries_to_print, sep='\n')
