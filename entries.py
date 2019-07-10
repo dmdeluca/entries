@@ -52,6 +52,10 @@ def store_input(entry_file, user_input):
 helpful_tips = '\n--TIPS-- try "--has keyword keyword2" or "july 8" or "jul --has dog"\n'
 
 
+def date_to_path(year, month, day):
+    return f'entries/{year}/{month}_({calendar.month_name[month].lower()})/entry-{datetime.datetime(year, month, day).date().isoformat()}'
+
+
 def read_loop():
     while (True):
         input_string = input("which entries would you like to read? ")
@@ -92,7 +96,7 @@ def read_loop():
                 for day in include_days:
                     formatted_date = datetime.datetime(
                         year, month, day).date().isoformat()
-                    path = f'entries/{year}/{month}_({calendar.month_name[month].lower()})/entry-{formatted_date}'
+                    path = date_to_path(year, month, day)
                     if (os.path.isfile(path)):
                         f = open(path, 'r')
                         all_entries = f.read()

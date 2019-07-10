@@ -4,7 +4,7 @@ Entries is a small python project that reads and writes journal entries. It is d
 
 ## commands
 
-By default, entries runs in write mode, in which a user types entries in succession separated by a carriage return. However, by adding `r` to the command, you can read past journal entries by entering dates.
+By default, entries runs in write mode, in which a user types entries in succession separated by a carriage return. However, by adding `r` to the command, you can read past journal entries by entering dates and keywords.
 
 ### examples
 
@@ -18,5 +18,6 @@ To search for entries in read mode, type something like `july august --has apart
 
 In the future, entries will have the following features:
 * ~~Search past entries by keyword~~
+* Journal entries ranked by keyword density
 * Edit past entries
 * Add search keywords to starting command
