@@ -2,6 +2,7 @@ import datetime
 import calendar
 import os
 import sys
+import string
 
 
 def write_loop():
@@ -55,34 +56,66 @@ def read_loop():
             os.system("CLS")
             print("closed journal")
             break
+        arguments = input_string.split(' ')
         default_year = datetime.datetime.now().year
+
         include_years = list(
-            filter(lambda i: (str(i) in input_string.split(' ') and i != default_year),
+            filter(lambda i: (str(i) in arguments and i != default_year),
                    range(40, 3000)))
-        if (len(include_years) < 1):
-            include_years.append(default_year)
-        include_days = list(
-            filter(lambda i: (str(i) in input_string.split(' ')), range(1, 32)))
         include_months = list(filter(lambda x: (input_string.lower().find(
             calendar.month_abbr[x].lower()) != -1), range(1, 13)))
+        include_days = list(
+            filter(lambda i: (str(i) in arguments), range(1, 32)))
+
+        if (len(include_years) < 1):
+            include_years.append(default_year)
+        if (include_months == []):
+            include_months = [datetime.datetime.now().month]
+        include_words = []
+        entries_to_print = []
+        if ("--has" in arguments):
+            include_words = arguments[arguments.index("--has")+1:]
+            print(f'looking for entries containing:', *include_words)
         none_found = True
         for year in include_years:
             for month in include_months:
-                if (include_days == []):
-                    include_days = range(
-                        1, calendar.monthrange(year, month)[1]+1)
                 for day in include_days:
+                    if (include_days == []):
+                        include_days = range(
+                            1, calendar.monthrange(year, month)[1]+1)
                     formatted_date = datetime.datetime(
                         year, month, day).date().isoformat()
                     path = f'entries/{year}/{month}_({calendar.month_name[month].lower()})/entry-{formatted_date}'
                     if (os.path.isfile(path)):
-                        print(f'-- entry-{formatted_date} --')
                         f = open(path, 'r')
-                        print(f.read())
+                        all_entries = f.read()
                         f.close()
-                        none_found = False
+                        if (include_words == [] and all_entries != []):
+                            print(f'-- entry-{formatted_date} --')
+                            print(all_entries)
+                            none_found = False
+                        else:
+                            entries_containing_words = list(filter(lambda x: hits(
+                                x, include_words) != 0, all_entries.split('\n')))
+                            if (entries_containing_words != []):
+                                additions = list(map(lambda x: f'<{year}-{calendar.month_abbr[month].lower()}-{day}>' +
+                                                     x + f' ({hits(x,include_words)})', entries_containing_words))
+                                entries_to_print += additions
+                                none_found = False
         if none_found:
             print("no entries found")
+        elif (include_words != []):
+            print('-- entries containing {', *include_words, '} --')
+            print(*entries_to_print, sep='\n')
+
+
+def hits(string_to_search, search_terms):
+    hits = 0
+    list_to_search = string_to_search.translate(
+        str.maketrans('', '', string.punctuation)).lower().split(' ')
+    for term in search_terms:
+        hits += list_to_search.count(term.lower())
+    return hits
 
 
 def main():
