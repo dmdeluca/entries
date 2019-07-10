@@ -17,6 +17,6 @@ To search for entries in read mode, type something like `july august --has apart
 ## future directions
 
 In the future, entries will have the following features:
-* Search past entries by keyword
+* ~~Search past entries by keyword~~
 * Edit past entries
 * Add search keywords to starting command
