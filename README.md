@@ -12,6 +12,8 @@ By default, entries runs in write mode, in which a user types entries in success
 
 `python entries.py r` -> runs the program in read mode.
 
+To search for entries in read mode, type something like `july august --has apartment linda`.
+
 ## future directions
 
 In the future, entries will have the following features:
