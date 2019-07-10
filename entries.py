@@ -70,14 +70,17 @@ def read_loop():
             print(helpful_tips)
             continue
 
-        include_years = list(
-            filter(lambda i: (str(i) in arguments and i != default_year),
-                   range(40, 3000)))
+        # Because the only years we care about are from 2000 to 2100, and even that is generous.
+        include_years = list(filter(lambda i: (str(i) in arguments and i != default_year),
+                                    range(2000, 2100)))
+
+        # Months in the calendar API are 1-indexed.
         include_months = list(filter(lambda x: (input_string.lower().find(
             calendar.month_abbr[x].lower()) != -1), range(1, 13)))
         include_days = list(
             filter(lambda i: (str(i) in arguments), range(1, 32)))
 
+        # By default we include the current year because it just makes sense.
         if (len(include_years) < 1):
             include_years.append(default_year)
         if (include_months == []):
@@ -101,10 +104,12 @@ def read_loop():
                         f = open(path, 'r')
                         all_entries = f.read()
                         f.close()
+                        # In this scenario we have no search terms.
                         if (include_words == []):
                             print(f'-- entry-{formatted_date} --')
                             print(all_entries)
                             none_found = False
+                        # In this scenario we're looking for stuff.
                         else:
                             entries_containing_words = list(filter(lambda x: hits(
                                 x, include_words) != 0, all_entries.split('\n')))
